@@ -2,11 +2,13 @@ package org.skyscreamer.nevado.jms.metadata;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.skyscreamer.nevado.jms.AbstractJMSTest;
 import org.skyscreamer.nevado.jms.NevadoSession;
 
 import javax.jms.*;
 
+@Ignore
 public class JMSMessageIDTest extends AbstractJMSTest {
     @Test
     public void testAssign() throws JMSException {
