@@ -104,8 +104,14 @@ public class NevadoConnectionFactory
 
 	public NevadoTopicConnection createTopicConnection() throws JMSException {
 		checkSQSConnectorFactory();
-		NevadoTopicConnection connection = new NevadoTopicConnection(
-				_sqsConnectorFactory.getInstance(_awsAccessKey, _awsSecretKey, _awsSQSEndpoint, _awsSNSEndpoint));
+		NevadoTopicConnection connection = null;
+		if (_awsCredentials == null) {
+			connection = new NevadoTopicConnection(
+					_sqsConnectorFactory.getInstance(_awsAccessKey, _awsSecretKey, _awsSQSEndpoint, _awsSNSEndpoint));
+		} else {
+			connection = new NevadoTopicConnection(
+					_sqsConnectorFactory.getInstance(_awsCredentials, _awsSQSEndpoint, _awsSNSEndpoint));
+		}
 		initializeConnection(connection);
 		return connection;
 	}

@@ -35,6 +35,7 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.CreateTopicRequest;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.DeleteTopicRequest;
+import com.amazonaws.services.sns.model.ListTopicsRequest;
 import com.amazonaws.services.sns.model.ListTopicsResult;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.SubscribeRequest;
@@ -58,6 +59,7 @@ public class AmazonAwsSQSConnector extends AbstractSQSConnector {
 
 	private final AmazonSQS _amazonSQS;
 	private final AmazonSNS _amazonSNS;
+	private final AWSCredentials _awsCredentials;
 
 	private boolean _testAlwaysPasses = false;
 
@@ -92,6 +94,7 @@ public class AmazonAwsSQSConnector extends AbstractSQSConnector {
 			_amazonSQS = new AmazonSQSClient(awsCredentials, clientConfiguration);
 			_amazonSNS = new AmazonSNSClient(awsCredentials, clientConfiguration);
 		}
+		_awsCredentials = awsCredentials;
 	}
 
 	public boolean isTestAlwaysPasses() {
@@ -137,8 +140,16 @@ public class AmazonAwsSQSConnector extends AbstractSQSConnector {
 			return;
 		}
 		try {
-			_amazonSQS.listQueues();
-			_amazonSNS.listTopics();
+			ListQueuesRequest listQueuesRequest = new ListQueuesRequest();
+			listQueuesRequest.setRequestCredentials(_awsCredentials);
+			_amazonSQS.setEndpoint("http://sqs.eu-west-1.amazonaws.com");
+			_amazonSQS.listQueues(listQueuesRequest);
+
+			ListTopicsRequest listTopicsRequest = new ListTopicsRequest();
+			listTopicsRequest.setRequestCredentials(_awsCredentials);
+			_amazonSNS.setEndpoint("http://sns.eu-west-1.amazonaws.com");
+			_amazonSNS.listTopics(listTopicsRequest);
+
 		} catch (AmazonClientException e) {
 			throw handleAWSException("Connection test failed", e);
 		}

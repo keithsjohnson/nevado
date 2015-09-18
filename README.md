@@ -1,6 +1,10 @@
 Nevado JMS
 ==========
 
+This branch has been changed to pass AWSCredentials derived from InstanceProfileCredentialsProvider but this does NOT work
+because when uploaded to AWS it produces an Access Denied exception!
+Need to investigate why but NOT done yet!
+
 A JMS driver for Amazon Web Services' queue and notification services (SQS/SNS).
 
 Getting started is easy.  Download the jar or add the following to your pom.xml:
